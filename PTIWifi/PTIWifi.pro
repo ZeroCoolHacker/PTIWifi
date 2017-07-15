@@ -13,10 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        interfacedialog.cpp
+        interfacedialog.cpp \
+    deauthattackwindow.cpp
 
-HEADERS  += interfacedialog.h
+HEADERS  += interfacedialog.h \
+    deauthattackwindow.h
 
-FORMS    += interfacedialog.ui
+FORMS    += interfacedialog.ui \
+    deauthattackwindow.ui
 
 LIBS = -L /usr/local/lib/ -l tins -lpthread

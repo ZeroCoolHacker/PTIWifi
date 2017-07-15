@@ -22,6 +22,9 @@ public:
     explicit InterfaceDialog(QWidget *parent = 0);
     ~InterfaceDialog();
 
+private slots:
+    void on_go_pushButton_clicked();
+
 private:
     Ui::InterfaceDialog *ui;
     QStringListModel *interfaceComboBoxModel;

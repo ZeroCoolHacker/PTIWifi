@@ -2,6 +2,7 @@
 #include "ui_interfacedialog.h"
 #include <unistd.h>
 #include <QMessageBox>
+#include <QDebug>
 
 InterfaceDialog::InterfaceDialog(QWidget *parent) :
     QDialog(parent),
@@ -47,4 +48,12 @@ void InterfaceDialog::populateInterfaceCombobox()
     interfaceComboBoxModel->setStringList(ifaceList);
     ui->Interface_comboBox->setModel(interfaceComboBoxModel);
     ui->status_label->setText("Interfaces loaded!");
+
+    //select default interface
+    ui->Interface_comboBox->setCurrentText(QString::fromStdString(Tins::NetworkInterface::default_interface().name()));
+}
+
+void InterfaceDialog::on_go_pushButton_clicked()
+{
+    //load the window
 }
