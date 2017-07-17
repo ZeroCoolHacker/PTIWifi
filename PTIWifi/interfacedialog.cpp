@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <QMessageBox>
 #include <QDebug>
+#include "deauthattackwindow.h"
 
 InterfaceDialog::InterfaceDialog(QWidget *parent) :
     QDialog(parent),
@@ -35,6 +36,7 @@ void InterfaceDialog::initializeModels()
 void InterfaceDialog::populateInterfaceCombobox()
 {
     ui->status_label->setText("Scanning for interfaces...");
+    qDebug() << "Scanning for interfaces...";
     IFaceVec = Tins::NetworkInterface::all();
     if(IFaceVec.size() == 0){
         ui->status_label->setText("No Interfaces found!");
@@ -55,5 +57,9 @@ void InterfaceDialog::populateInterfaceCombobox()
 
 void InterfaceDialog::on_go_pushButton_clicked()
 {
-    //load the window
+    if(ui->Interface_comboBox->currentText().isEmpty()) return;
+    DeauthAttackWindow * window = new DeauthAttackWindow(ui->Interface_comboBox->currentText().toStdString());
+    window->setAttribute(Qt::WA_DeleteOnClose);
+    window->show();
+    this->close();
 }

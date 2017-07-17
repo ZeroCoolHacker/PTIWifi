@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         interfacedialog.cpp \
-    deauthattackwindow.cpp
+    deauthattackwindow.cpp \
+    beaconsniffer.cpp
 
 HEADERS  += interfacedialog.h \
-    deauthattackwindow.h
+    deauthattackwindow.h \
+    beaconsniffer.h
 
 FORMS    += interfacedialog.ui \
     deauthattackwindow.ui
