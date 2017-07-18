@@ -58,8 +58,8 @@ void InterfaceDialog::populateInterfaceCombobox()
         qDebug() << "getting default interface";
         QString default_iface = QString::fromStdString(Tins::NetworkInterface::default_interface().name());
         ui->Interface_comboBox->setCurrentText(default_iface);
-    } catch(Tins::invalid_interface&){
-        qDebug() << "Invalid Interface";
+    } catch(Tins::invalid_interface& a){
+        qDebug() << a.what();
     }
 
 
@@ -68,10 +68,11 @@ void InterfaceDialog::populateInterfaceCombobox()
 void InterfaceDialog::on_go_pushButton_clicked()
 {
     if(ui->Interface_comboBox->currentText().isEmpty()) return;
-
-    DeauthAttackWindow * window = new DeauthAttackWindow(ui->Interface_comboBox->currentText().toStdString());
-    window->setAttribute(Qt::WA_DeleteOnClose);
-    window->show();
     qDebug() << "Creating Attack Dialog";
-    this->close();
+    DeauthAttackWindow * window = new DeauthAttackWindow(ui->Interface_comboBox->currentText().toStdString());
+    qDebug() << "Created the window instance";
+    window->setAttribute(Qt::WA_DeleteOnClose);
+    window->showMaximized();
+
+    this->hide();
 }

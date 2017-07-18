@@ -19,8 +19,7 @@ SOURCES += main.cpp\
 
 HEADERS  += interfacedialog.h \
     deauthattackwindow.h \
-    beaconsniffer.h \
-    linux.h
+    beaconsniffer.h
 
 FORMS    += interfacedialog.ui \
     deauthattackwindow.ui

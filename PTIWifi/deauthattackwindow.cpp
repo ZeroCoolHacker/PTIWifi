@@ -1,13 +1,16 @@
 #include "deauthattackwindow.h"
 #include "ui_deauthattackwindow.h"
+#include <QDebug>
 
 DeauthAttackWindow::DeauthAttackWindow(string interface, QWidget *parent) :
     QMainWindow(parent),iface(interface),
     ui(new Ui::DeauthAttackWindow)
 {
     ui->setupUi(this);
+    qDebug() << "Attack window constructed" << QString::fromStdString(interface);
     apListModel = new QStringListModel(this);
     setupConnections();
+    qDebug() << "Running sniffer...";
     sniffer.run(iface);
 }
 
@@ -18,6 +21,7 @@ DeauthAttackWindow::~DeauthAttackWindow()
 
 void DeauthAttackWindow::setupConnections()
 {
+    qDebug() << "Setting up connections";
     connect(ui->stopScan_pushButton, &QPushButton::clicked, &sniffer, &BeaconSniffer::stopScan);
     connect(&sniffer, &BeaconSniffer::APFound, this, &DeauthAttackWindow::getAP);
     connect(&sniffer, &BeaconSniffer::scanStatusChanged, this, &DeauthAttackWindow::showScanStatus);

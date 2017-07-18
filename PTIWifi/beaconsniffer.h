@@ -12,7 +12,7 @@ class BeaconSniffer : public QObject{
 
 public:
     explicit BeaconSniffer(QObject *parent = 0);
-    void run(const string& iface);
+    void run(const std::string& iface);
     bool isScanning() {return keepScanning;}
 
     struct AP {
@@ -20,7 +20,7 @@ public:
         std::string ssid;
     };
 private:
-
+    QString iface;
     typedef Dot11::address_type address_type;
     typedef set<address_type> ssids_type;
     ssids_type ssids;
@@ -29,6 +29,7 @@ private:
 
     bool callback(PDU& pdu);
     void hopChannel(); //changes the channel
+    void setWifiChannel(QString iface, unsigned short chan);
 
 signals:
     void APFound(AP ap);

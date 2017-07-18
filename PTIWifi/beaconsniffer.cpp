@@ -1,18 +1,31 @@
 #include "beaconsniffer.h"
+#include <QTimer>
+#include <QProcess>
+#include <QStringList>
+#include <QString>
+#include <QDebug>
 
-BeaconSniffer::BeaconSniffer(QObject *parent) : QObject(parent)
+BeaconSniffer::BeaconSniffer( QObject *parent)
+    : QObject(parent)
 {
-
 }
 
-void BeaconSniffer::run(const std::string& iface) {
+void BeaconSniffer::run(const string &interface) {
+    iface = QString::fromStdString(interface);
+    qDebug() << "Constructing the sniffer";
     SnifferConfiguration config;
     config.set_promisc_mode(true);
+    qDebug() << "promisc mode on";
     config.set_filter("type mgt subtype beacon");
     config.set_rfmon(true);
-    Sniffer sniffer(iface, config);
+    qDebug() << "monitor mode on";
+    Sniffer sniffer(iface.toStdString(), config);
+    qDebug() << "sniffer created";
     sniffer.sniff_loop(make_sniffer_handler(this, &BeaconSniffer::callback));
     emit scanStatusChanged();
+    QTimer *channelTimer = new QTimer;
+    connect(channelTimer, &QTimer::timeout, this, &BeaconSniffer::hopChannel);
+    channelTimer->start(300);
 }
 
 bool BeaconSniffer::callback(PDU& pdu) {
@@ -45,3 +58,20 @@ bool BeaconSniffer::callback(PDU& pdu) {
     }
     return true;
 }
+
+void BeaconSniffer::hopChannel()
+{
+    if(channel == 14)
+        setWifiChannel(iface, 0);
+    setWifiChannel(iface, channel+1);
+    emit channelChanged();
+}
+
+void BeaconSniffer::setWifiChannel(QString iface, unsigned short chan){
+    QProcess iwconfig;
+    QString program = "iwconfig";
+    QStringList arguments;
+    arguments << iface << "channel" << QString::number(chan);
+    iwconfig.execute(program,arguments);
+}
+
