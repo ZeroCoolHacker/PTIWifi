@@ -36,6 +36,7 @@ private:
 
 public slots:
     void getAP(BeaconSniffer::AP ap);
+    void showScanStatus();
 };
 
 #endif // DEAUTHATTACKWINDOW_H

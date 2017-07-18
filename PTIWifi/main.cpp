@@ -1,5 +1,6 @@
 #include "interfacedialog.h"
 #include <QApplication>
+#include "linux.h"
 
 int main(int argc, char *argv[])
 {

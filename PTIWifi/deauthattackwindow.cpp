@@ -20,6 +20,7 @@ void DeauthAttackWindow::setupConnections()
 {
     connect(ui->stopScan_pushButton, &QPushButton::clicked, &sniffer, &BeaconSniffer::stopScan);
     connect(&sniffer, &BeaconSniffer::APFound, this, &DeauthAttackWindow::getAP);
+    connect(&sniffer, &BeaconSniffer::scanStatusChanged, this, &DeauthAttackWindow::showScanStatus);
 }
 
 void DeauthAttackWindow::setupAPListModel()
@@ -33,4 +34,11 @@ void DeauthAttackWindow::getAP(BeaconSniffer::AP ap)
     vecAP.push_back(ap);
     ssidList << QString::fromStdString(ap.ssid);
     setupAPListModel();
+}
+
+void DeauthAttackWindow::showScanStatus()
+{
+    if(sniffer.isScanning())
+        ui->status_label->setText("Scanning...");
+    ui->status_label->setText("Stopped Scanning");
 }

@@ -12,6 +12,7 @@ void BeaconSniffer::run(const std::string& iface) {
     config.set_rfmon(true);
     Sniffer sniffer(iface, config);
     sniffer.sniff_loop(make_sniffer_handler(this, &BeaconSniffer::callback));
+    emit scanStatusChanged();
 }
 
 bool BeaconSniffer::callback(PDU& pdu) {

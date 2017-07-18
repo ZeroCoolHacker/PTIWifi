@@ -13,23 +13,27 @@ class BeaconSniffer : public QObject{
 public:
     explicit BeaconSniffer(QObject *parent = 0);
     void run(const string& iface);
+    bool isScanning() {return keepScanning;}
+
     struct AP {
         Dot11::address_type bssid;
         std::string ssid;
     };
 private:
+
     typedef Dot11::address_type address_type;
     typedef set<address_type> ssids_type;
+    ssids_type ssids;
+    bool keepScanning = true; // tells the status of scan
+    unsigned short channel = 1;
 
     bool callback(PDU& pdu);
+    void hopChannel(); //changes the channel
 
-    ssids_type ssids;
-
-
-    bool keepScanning = true;
 signals:
     void APFound(AP ap);
-
+    void scanStatusChanged();
+    void channelChanged();
 public slots:
     void stopScan() {keepScanning = false; }
 };

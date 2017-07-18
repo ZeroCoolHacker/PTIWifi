@@ -38,6 +38,7 @@ void InterfaceDialog::populateInterfaceCombobox()
     ui->status_label->setText("Scanning for interfaces...");
     qDebug() << "Scanning for interfaces...";
     IFaceVec = Tins::NetworkInterface::all();
+    qDebug() << "Scan Complete";
     if(IFaceVec.size() == 0){
         ui->status_label->setText("No Interfaces found!");
         return;
@@ -45,6 +46,7 @@ void InterfaceDialog::populateInterfaceCombobox()
     //otherwise populate the combobox
     QStringList ifaceList;
     for(Tins::NetworkInterface iface : IFaceVec){
+        qDebug() << QString::fromStdString(iface.name());
         ifaceList.append(QString::fromStdString(iface.name()));
     }
     interfaceComboBoxModel->setStringList(ifaceList);
@@ -52,14 +54,24 @@ void InterfaceDialog::populateInterfaceCombobox()
     ui->status_label->setText("Interfaces loaded!");
 
     //select default interface
-    ui->Interface_comboBox->setCurrentText(QString::fromStdString(Tins::NetworkInterface::default_interface().name()));
+    try{
+        qDebug() << "getting default interface";
+        QString default_iface = QString::fromStdString(Tins::NetworkInterface::default_interface().name());
+        ui->Interface_comboBox->setCurrentText(default_iface);
+    } catch(Tins::invalid_interface&){
+        qDebug() << "Invalid Interface";
+    }
+
+
 }
 
 void InterfaceDialog::on_go_pushButton_clicked()
 {
     if(ui->Interface_comboBox->currentText().isEmpty()) return;
+
     DeauthAttackWindow * window = new DeauthAttackWindow(ui->Interface_comboBox->currentText().toStdString());
     window->setAttribute(Qt::WA_DeleteOnClose);
     window->show();
+    qDebug() << "Creating Attack Dialog";
     this->close();
 }
